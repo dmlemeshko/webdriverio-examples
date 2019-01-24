@@ -12,9 +12,9 @@
   "author": "Tsutomu Kawamura",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^3.0.0",
-    "phantomjs-prebuilt": "^2.1.10",
-    "require-dir": "^0.3.0",
-    "webdriverio": "^4.2.3"
+    "chromedriver": "2.42.1",
+    "mocha": "5.2.0",
+    "require-dir": "1.2.0",
+    "webdriverio": "5.4.1"
   }
 }

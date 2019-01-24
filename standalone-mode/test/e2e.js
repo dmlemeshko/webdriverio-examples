@@ -1,6 +1,6 @@
 'use strict'
 const
-  phantomjs = require('phantomjs-prebuilt'),
+  chromedriver = require('chromedriver'),
   webdriverio = require('webdriverio'),
   requireDir = require('require-dir'),
   specs = requireDir('./e2e/'),
@@ -9,26 +9,38 @@ const
     ? require('./webdriver.local.js')
     : require('./webdriver.cloud.js')
 
-let program
+const port = 9515;
+const args = [
+  '--url-base=wd/hub',
+  `--port=${port}`
+];
+
+const options = {
+  port,
+  capabilities: {
+    browserName: 'chrome'
+  }
+};
+
 
 /** runs PhantomJS */
-if (isLocal) before(() => phantomjs.run('--webdriver=4444').then(p => program = p))
+if (isLocal) before(() => chromedriver.start(args))
 
 connections.forEach(connection => {
   describe(desc(connection), () => {
     /** runs WebDriver */
-    before(() => global.browser = webdriverio.remote(connection).init())
+    before(async () => global.browser = await webdriverio.remote(options))
 
     /** execute each test within 'e2e' dir */
     for (const key in specs) specs[key]()
 
     /** ends the session */
-    after(() => browser.end())
+    after(async () => await browser.deleteSession());
   })
 })
 
 /** closes PhantomJS process */
-if (isLocal) after(() => program.kill())
+if (isLocal) after(() => chromedriver.stop())
 
 /** generate description from capabilities */
 function desc (connection) {

@@ -4,12 +4,10 @@ const assert = require('assert')
 module.exports = () => {
 
   describe('First Test Group', () => {
-    it('gets the title of MDN toppage', () => {
-      return browser
-        .url('https://developer.mozilla.org/en-US/')
-        .getTitle().then(title => {
-           assert.equal(title, 'Mozilla Developer Network')
-        })
+    it('gets the title of MDN toppage', async () => {
+      await browser.url('https://developer.mozilla.org/en-US/');
+      const title = await browser.getTitle();
+      assert.equal(title, 'MDN Web Docs');
     })
   })
 
